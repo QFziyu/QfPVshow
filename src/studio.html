@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="QFziyu"><meta name="description" content="Qf-PV show V1 — QFziyu 的文字 PV 创作工作台。歌曲风格、独立元素精修与动态留白。">
+<title>Qf-PV show V1 · QFziyu</title><link rel="icon" href="assets/qf-mark.svg" type="image/svg+xml"><style>__CSS__</style></head><body>
+<header class="top">
+<div class="brand"><span class="brand-mark" aria-hidden="true">QF</span><div class="brand-word"><h1>Qf-PV show <span>V1</span></h1><small>Created by QFziyu</small></div></div>
+<div class="project-meta"><input id="projectTitle" aria-label="项目名称" value="未命名 PV"><span id="saveState" class="pill">本地草稿</span></div>
+<div class="top-actions"><div class="history-actions"><button id="undo" title="Ctrl+Z">撤销</button><button id="redo" title="Ctrl+Shift+Z">重做</button></div><button id="openProject">打开项目</button><button id="saveProject">保存项目</button><button id="showExport" class="accent">导出作品</button><button id="showAbout" class="quiet" aria-label="关于 Qf-PV show">关于</button></div>
+</header>
+<main class="workspace">
+<aside class="left" aria-label="创作设置">
+<nav class="panel-tabs" role="tablist" aria-label="创作步骤"><button id="tabMaterial" role="tab" aria-controls="panelMaterial" aria-selected="true"><span>01</span> 素材</button><button id="tabStyle" role="tab" aria-controls="panelStyle" aria-selected="false" tabindex="-1"><span>02</span> 风格</button><button id="tabComposition" role="tab" aria-controls="panelComposition" aria-selected="false" tabindex="-1"><span>03</span> 构图</button></nav>
+<div class="panel-scroll">
+<section id="panelMaterial" class="tab-panel" role="tabpanel" aria-labelledby="tabMaterial">
+<div class="panel-intro"><h2>素材与歌词</h2><p>先放入声音，再让文字有节奏。</p></div>
+<div class="section-head"><span>素材文件</span><span id="assetCount">0</span></div>
+<div class="row"><button id="audioImport">＋ 音乐</button><button id="bgImport">＋ 背景图 / 视频</button></div><div class="row"><button id="fgImport">＋ 人物 / 前景</button><button id="assetRelink">关联丢失素材</button></div><div id="assetList" class="asset-list"></div>
+<div class="section-head space"><span>歌词与字幕</span><small>LRC / SRT</small></div><label>歌词与文案<textarea id="lyrics" rows="7" spellcheck="false" placeholder="每行一句，/ 拆分镜头；也可导入 LRC 或 SRT"></textarea></label>
+<div class="row"><button id="subtitleImport">导入 LRC / SRT</button><button id="generate">只重新编排字幕</button></div>
+<label class="check"><input id="captionMode" type="checkbox">逐句独立编辑字幕</label>
+<div class="row"><button id="selectCaption">选中当前句</button><button id="cleanCaptions">清理未修改的失联字幕</button></div>
+<p id="captionStats" class="hint">整组控制字幕；开启逐句编辑后，每句可独立移动和追踪。</p>
+<label>BPM（0 = 自动）<input id="bpm" type="number" min="0" max="300" value="0"></label><details id="timingPanel"><summary>听音打轴 · T 记录下一句</summary>
+<p class="hint">先填歌词、导入音乐。播放时，每句唱到开头按 T；可先跳转、再重打所选句。无需额外模型。</p>
+<div class="row"><button id="timingPrepare">准备歌词</button><button id="timingClear">清除时间重打</button></div>
+<div id="timingList" class="timing-list"></div><div id="timingNext" class="timing-next">先准备歌词</div>
+<div class="row"><button id="timingTap" class="accent">记录下一句（T）</button><button id="timingBack">撤回上一句</button></div>
+<label class="check"><input id="timingSnap" type="checkbox">吸附到附近节拍（±0.12 秒）</label>
+<div class="two"><label>所选句起点（秒）<input id="timingStart" type="number" min="0" step=".01"></label><label>整体偏移（秒）<input id="timingOffset" type="number" value="0" step=".05"></label></div>
+<div class="row"><button id="timingShift">应用偏移</button><button id="timingApply">应用时间到字幕</button></div>
+<div class="row"><button id="lrcExport">导出 LRC</button><button id="timingFinish">当前帧作为末句结束</button></div>
+</details>
+<div class="section-head space"><span>歌词镜头</span><small>点击跳转 · 锁定保留编排</small></div><div id="lineList" class="line-list"></div>
+<button id="goStyle" class="full next-step">下一步 · 选择风格 →</button></section>
+<section id="panelStyle" class="tab-panel" role="tabpanel" aria-labelledby="tabStyle" hidden><div class="panel-intro"><h2>风格编排</h2><p>歌曲决定节奏，配色决定气质。</p></div><label>背景与生成方案<select id="presetChoice"><option value="jizura">JIZURA 完整风格 · 按当前歌曲分类</option><option value="random">随机抽一套</option><option value="collage">纸片拼贴</option><option value="construct">红黑构成</option><option value="orbit">几何律动</option><option value="blueprint">蓝图线构</option><option value="pop">轻快色块</option></select></label>
+
+
+<p class="hint">完整风格使用 JIZURA 动效库；五套几何背景可逐个拆分精修。重新生成保留手工修改和锁定元素。</p>
+<div class="two"><label>歌曲风格<select id="profile"><option value="ballad">慢歌抒情</option><option value="minimal">极简叙事</option><option value="pop">流行轻快</option><option value="rock">摇滚燃曲</option><option value="electronic">电子舞曲</option><option value="cinematic">电影感</option><option value="free">自由搭配</option></select></label>
+<label>视觉配色<select id="style"></select></label></div>
+<p id="profileDescription" class="hint"></p><button id="oneClick" class="accent full">生成当前风格</button><div class="row"><button id="backgroundGenerate">只换背景</button><button id="clearGenerated" title="保留手工修改、锁定和被跟随的背景元素">清理生成背景</button></div>
+<details><summary>完整模板库与扩展效果</summary>
+<p id="libraryStats" class="hint"></p>
+<div class="two"><label class="check"><input id="packExtra" type="checkbox">扩展模板库</label><label class="check"><input id="packWa" type="checkbox">和风元素</label><label class="check"><input id="packTypo" type="checkbox">文字 PV</label><label class="check"><input id="packKinetic" type="checkbox">动感文字</label><label class="check"><input id="packHorror" type="checkbox">恐怖效果</label></div>
+<p class="hint">歌曲分类约束随机动效；“自由搭配”可随机使用全部已开启效果。下方手动指定可超出分类。</p>
+<label>效果类别<select id="templateGroup"></select></label><label>搜索模板<input id="templateSearch" placeholder="如：波浪、切片、胶片"></label><label>模板<select id="templatePart"></select></label>
+<button id="applyTemplate" class="full">应用到当前歌词行</button><button id="resetTemplate" class="full">当前行恢复自动编排</button>
+<p id="templateTarget" class="hint"></p></details>
+<details><summary>运动强度与装饰</summary><label>运动幅度<input id="motion" type="range" min="0" max="1.5" step=".05"></label><label>装饰密度<input id="decor" type="range" min="0" max="1.5" step=".05"></label><label>节拍缩放<input id="beatReact" type="range" min="0" max="1" step=".05" value="0"></label>
+<label class="check"><input type="checkbox" id="templateBg" checked>模板背景装饰</label><label class="check"><input type="checkbox" id="staticInterludes" checked>间奏静止</label><label class="check"><input type="checkbox" id="flash">允许闪屏</label>
+<label>单行排版覆盖<select id="layoutOverride"><option value="">自动选择</option></select></label><button id="applyLayout">应用到当前歌词行</button></details>
+<button id="goComposition" class="full next-step">下一步 · 构图与留白 →</button></section>
+<section id="panelComposition" class="tab-panel" role="tabpanel" aria-labelledby="tabComposition" hidden><div class="panel-intro"><h2>构图与留白</h2><p>确定画幅，给人物留出位置。</p></div><div class="section-head"><span>画面规格</span></div><div class="two"><label>画幅<select id="aspect"><option>16:9</option><option>4:3</option><option>1:1</option><option>9:16</option></select></label><label>帧率<select id="fps"><option>24</option><option>25</option><option selected>30</option><option>60</option><option>120</option></select></label></div>
+<div><label>输出分辨率<select id="resolution"><option value="720">720p</option><option value="1080" selected>1080p</option><option value="1440">1440p</option></select></label></div>
+<details id="spacePanel" open><summary>动态留白</summary>
+<label class="check"><input type="checkbox" id="centerFree">启用留白区域</label>
+<div class="row"><button id="selectSpace">选中 / 编辑留白</button><button id="centerSpace">居中</button></div>
+<label>字幕分布<select id="spaceDirection"><option value="lr">留白两侧（左 / 右）</option><option value="tb">留白上下（上 / 下）</option></select></label>
+<p class="hint">拖动区域改位置，拖角点分别改宽高；上方圆点旋转。选择“当前帧关键帧”可让区域随时间变化。背景与人物图片 / 视频保留，字幕和图形避让。</p>
+</details>
+<div class="workflow-note"><b>让留白随画面变化</b><p>选中留白区域后，将画布上方“拖动修改”切换为“当前帧关键帧”，在不同时间拖动位置或角点。</p></div></section>
+</div></aside>
+<section class="center"><div class="view-toolbar"><div class="monitor-meta"><span class="monitor-label">画面预览</span><span id="planStats">准备画面…</span><span class="separator">/</span><span id="trackModeLabel">点选 / 框选元素</span></div><button id="demo" class="quiet">载入演示</button></div>
+<div class="canvas-tools"><button id="canvasSelect">点选 V</button><button id="canvasMarquee">框选 B</button><label>选取<select id="selectionFilter"><option value="all">全部元素</option><option value="background">背景元素</option><option value="foreground">前景 / 字幕</option></select></label><label>拖动修改<select id="canvasEditMode"><option value="offset">整体移动，保留轨迹</option><option value="key">当前帧关键帧</option></select></label><span id="selectedCount">1 个元素</span><button id="selectAllLayers">全选</button><button id="selectNone">取消</button></div>
+<div class="preview-area"><div id="stage" class="stage"><canvas id="preview" width="960" height="540" aria-label="PV 动画预览"></canvas><canvas id="overlay" width="960" height="540" tabindex="0" aria-label="手动追踪与路径画布"></canvas></div></div>
+<div class="transport"><button id="play" aria-label="播放">▶</button><button id="prevFrame" title="上一帧">‹</button><button id="nextFrame" title="下一帧">›</button><output id="timeReadout">00:00.000 / 00:00.000</output><label class="frame-label">帧<input id="frameInput" type="number" min="0" value="0"></label><button id="loop">循环：开</button><label class="check"><input id="guides" type="checkbox" checked>轨迹辅助线</label></div>
+<input id="scrub" type="range" min="0" max="10000" value="0" aria-label="播放位置">
+<div class="timeline-head"><span>时间轴 <small> / 图层与关键帧</small></span><small>空白拖动框选 · Shift 多选 · 拖动选中键改时间</small></div>
+<div class="key-tools"><select id="keySource" aria-label="显示的关键帧"><option value="rawSamples">源关键帧</option><option value="processedSamples">处理后的关键帧</option></select><span id="keySelectionCount">0 个键</span><button id="copyKeys">复制</button><button id="pasteKeys">粘贴</button><button id="toggleKeysLock">锁定 / 解锁</button><button id="deleteKeys">删除键</button></div>
+<div id="timelineScroll" class="timeline-scroll"><canvas id="timeline" tabindex="0" aria-label="图层关键帧时间线"></canvas></div>
+</section>
+
+<aside class="right" aria-label="元素精修与输出">
+<nav class="panel-tabs" role="tablist" aria-label="精修工具"><button id="tabElements" role="tab" aria-controls="panelElements" aria-selected="true">元素</button><button id="tabMotion" role="tab" aria-controls="panelMotion" aria-selected="false" tabindex="-1">运动</button><button id="tabExport" role="tab" aria-controls="panelExport" aria-selected="false" tabindex="-1">导出</button></nav>
+<div class="panel-scroll"><div id="editTitle" class="edit-title">自动歌词组 · 独立关键帧</div>
+<section id="panelElements" class="tab-panel" role="tabpanel" aria-labelledby="tabElements"><div class="section-head"><span>图层</span><small>点选画面，也可从这里选取</small></div><div class="row"><button id="addText">＋ 文字</button><button id="addReticle">＋ 追踪框</button><button id="addShape">＋ 几何元素</button></div><div id="layerList" class="layer-list"></div>
+<div class="row tiny"><button id="layerLock">锁定元素</button><button id="duplicateLayer">复制元素</button><button id="deleteLayer" title="删除所选图层">移除</button></div>
+<div class="row tiny"><button id="layerDown">下移</button><button id="layerUp">上移</button><button id="layerVisible">显示 / 隐藏</button></div>
+<label>图层名称<input id="layerName"></label><div id="textFields"><label>文字<input id="layerText"></label><label>字号<input id="fontSize" type="number" min="8" max="600"></label></div>
+<div id="captionFields"><p id="captionInfo" class="hint"></p><label>本句文案<input id="captionText"></label><button id="captionTextApply" class="full">应用文案，保留时间与轨迹</button><button id="captionReset" class="full">重置本句人工运动</button>
+<div id="captionRelinkFields"><label>重新关联到<select id="captionTarget"></select></label><button id="captionRelink" class="full">关联失联字幕，保留轨迹</button></div></div>
+<div class="two"><label id="layerColorField">元素颜色<input id="layerColor" type="color"></label><label>绘制位置<select id="layerRole"><option value="foreground">前景</option><option value="background">背景</option></select></label></div>
+<div id="spaceFields" hidden><div class="two"><label>留白宽度 %<input id="spaceWidth" type="number" min="1" max="200" step=".5"></label><label>留白高度 %<input id="spaceHeight" type="number" min="1" max="200" step=".5"></label></div><p class="hint">宽高与位置使用同一组关键帧。区域仅作避让控制，辅助框不会导出。</p></div><div id="shapeFields"><div class="two"><label>形状<select id="shapeType"><option value="rect">矩形 / 纸片</option><option value="ellipse">圆 / 椭圆</option><option value="triangle">三角</option><option value="line">线段</option><option value="stripes">条纹块</option></select></label><label>高度 %<input id="layerHeight" type="number" min=".1" max="500" step=".1"></label></div>
+<div class="two"><label>描边宽度（设计像素）<input id="shapeStroke" type="number" min="0" max="200"></label><label class="check"><input id="shapeFill" type="checkbox" checked>填充形状</label></div></div>
+<div class="section-head space"><span>变换与关键帧</span></div><div class="two"><label>X（设计像素）<input id="posX" type="number" step="1"></label><label>Y（设计像素）<input id="posY" type="number" step="1"></label></div>
+<div class="three"><label>缩放 %<input id="scale" type="number" min=".01" step="1"></label><label>旋转 °<input id="rotation" type="number" step="1"></label><label>透明 %<input id="opacity" type="number" min="0" max="100"></label></div>
+<div class="two"><label>入帧<input id="inFrame" type="number" min="0" step="1"></label><label>出帧（空 = 全程）<input id="outFrame" type="number" min="0" step="1"></label></div>
+<div class="two"><label>显示范围<select id="scopeLine"><option value="">全片</option></select></label><label>图像 / 框宽度 %<input id="layerWidth" type="number" min="1" max="200"></label></div>
+<div class="row key-write"><button id="addKey" class="accent">写入当前帧</button><button id="lockKey">锁定当前键</button></div>
+<button id="goMotion" class="full next-step">运动路径与追踪 →</button></section>
+<section id="panelMotion" class="tab-panel" role="tabpanel" aria-labelledby="tabMotion" hidden><div class="panel-intro"><h2>运动与追踪</h2><p>为当前元素设计轨迹与速度。</p></div><label>跟随图层<select id="followLayer"><option value="">不跟随</option></select></label><p id="followHint" class="hint">自动字幕保留内部动效，组运动可叠加人工轨迹或跟随一个追踪对象。</p>
+<div class="section-head space"><span>追踪与路径</span><span id="keyCount">0 键</span></div>
+<div class="two"><label>画布操作<select id="mode"><option value="select">点选 / 拖动元素</option><option value="box">框选元素</option><option value="move">单击写位置键</option><option value="single">逐帧单点追踪</option><option value="two">两点缩放旋转</option><option value="path">手绘运动路径</option></select></label><label>采样间隔（帧）<input id="interval" type="number" min="1" max="120" value="3"></label></div>
+<div class="two"><label>路径持续（帧）<input id="pathDuration" type="number" min="2" max="3000" value="90"></label><label>新键插值<select id="interpolation"><option value="linear">线性</option><option value="hold">保持</option></select></label></div>
+<p id="modeHint" class="hint">点击选中元素，空白拖动框选；Shift 多选，Alt 点击选择下层。双击或长按进入右侧独立编辑。</p>
+<div class="curve-title"><span>整体速度曲线</span><button id="resetSpeed">自然</button><button id="uniformSpeed">匀速</button></div><canvas id="speedCanvas" width="540" height="180" tabindex="0" aria-label="整体运动速度曲线"></canvas>
+<p class="hint">双击加点 · 拖动调整 · Delete 删除。修改曲线后点“重排速度”；锁定点保留位置和时刻。</p>
+<div class="row"><button id="smooth">平滑位置</button><button id="retime">重排速度</button><button id="resetRaw">恢复原始</button></div>
+<div class="row"><button id="simplify">压缩关键帧（2px）</button><button id="importTracker">导入 PR 追踪 JSON</button></div>
+<button id="backElements" class="full next-step">← 返回元素属性</button></section>
+<section id="panelExport" class="tab-panel" role="tabpanel" aria-labelledby="tabExport" hidden><div class="panel-intro"><h2>导出作品</h2><p>成片、透明素材或可编辑工程。</p></div>
+<div class="row"><button id="mp4Export" class="accent">导出 MP4</button><button id="pngExport">PNG 序列</button></div><label class="check"><input id="alpha" type="checkbox" checked>PNG 去底色和背景媒体，保留几何元素</label>
+<div class="row"><button id="aeExport">AE 可编辑工程包</button><button id="wavExport">音轨 WAV</button></div><div class="row"><button id="jsonExport">项目 JSON</button></div>
+<p class="hint">AE 工程包内运行 build.jsx 后保存为 AEP。跨引擎效果有差异；PNG 可保留浏览器画面。项目保存含原始素材。</p>
+<div class="workflow-note"><b>继续编辑，记得保存项目</b><p>“保存项目”保留素材和关键帧。视频用于播放，.pvf 项目用于下次继续创作。</p></div></section>
+</div></aside></main>
+<footer><span id="status" role="status" aria-live="polite">就绪 · 全部素材在本机处理</span><span class="signature">QFziyu <span class="footer-dot">·</span> 文字与影像的个人工作台</span></footer>
+<dialog id="aboutDialog" aria-labelledby="aboutTitle"><div class="dialog-top"><span class="eyebrow">ABOUT THIS EDITION</span><button id="closeAbout" aria-label="关闭关于">关闭</button></div><h2 id="aboutTitle">Qf-PV show <span>V1</span></h2><p class="author-credit">整合与新版设计 / <strong>QFziyu</strong></p><p>把歌曲风格、逐句字幕精修与动态留白，放进同一个创作工作台。</p><div class="about-sources"><p>基于 PV Fusion 项目主体，使用 JIZURA 歌曲动效引擎及 ManualTracker 曲线与追踪实现。原作者署名与来源许可保留。</p><a href="README-SOURCES.md" target="_blank" rel="noopener">查看完整文件来源与修改说明 ↗</a></div><div class="row"><button id="referenceEditor">JIZURA 原版高级编辑器</button><a class="button-link" href="docs/USER-GUIDE.md" target="_blank" rel="noopener">使用指南 ↗</a></div></dialog>
+<dialog id="progressDialog" aria-labelledby="progressTitle"><h2 id="progressTitle">正在导出</h2><progress id="progressBar" max="1" value="0"></progress><p id="progressText"></p><button id="cancelExport">取消</button></dialog>
+<input id="fileInput" type="file" hidden><div id="magnifier"><canvas width="180" height="180"></canvas></div>
+<script>__MUX__</script><script>__ENGINE__</script><script>__CURVES__</script><script>__CORE__</script><script>__SCENE__</script><script>__SPACE__</script><script>__TEMPLATES__</script><script>__PRESETS__</script><script>__LYRICS__</script><script>__CAPTIONS__</script><script>__ZIP__</script><script>__RENDERER__</script><script>window.PVF_AE_CORE=__AE_CORE__;</script><script>__EXPORTS__</script><script>__UI__</script><script>__APP__</script>
+</body></html>

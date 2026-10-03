@@ -1,0 +1,15 @@
+{
+  "name": "qf-pv-show",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Qf-PV show V1 — QFziyu's lyric motion workspace with editable elements and animated negative space.",
+  "author": "QFziyu",
+  "license": "SEE LICENSE IN LICENSE.md",
+  "engines": { "node": ">=20" },
+  "scripts": {
+    "build": "python -X utf8 build.py",
+    "test": "node tools/test.cjs",
+    "release": "python -X utf8 tools/release.py"
+  },
+  "devDependencies": { "@napi-rs/canvas": "0.1.100" }
+}

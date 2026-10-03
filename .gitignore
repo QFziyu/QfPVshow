@@ -1,0 +1,15 @@
+node_modules/
+__pycache__/
+*.py[cod]
+.DS_Store
+Thumbs.db
+.env
+.env.*
+!.env.example
+*.log
+dist/
+release-manifest.json
+tests/*-result.json
+tests/verification.json
+examples/test-*.zip
+examples/parity-*.png

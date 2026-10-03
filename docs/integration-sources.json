@@ -1,0 +1,16 @@
+{
+  "base": "PV-Fusion-v0.3",
+  "sourceArchives": [
+    {
+      "name": "JIZURA-歌曲风格分类版.zip",
+      "bytes": 11478419,
+      "sha256": "042a2096b0c07035dfd8a8e15ab36dea87c3ce38328b81a856431ae60128868c"
+    },
+    {
+      "name": "PV-Fusion-v0.3.zip",
+      "bytes": 6720949,
+      "sha256": "153ee9c4ce96cd4710074e4689228696fa29f5e02a894e8da43c8fc51f88771c"
+    }
+  ],
+  "comparison": "Original Fusion already includes the six song profiles and all 860 registered parts. Fusion-specific color, deterministic texture, and video preparation changes retained. Chinese labels and full reference editor imported from the song-style archive."
+}
