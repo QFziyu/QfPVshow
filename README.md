@@ -1,76 +1,57 @@
-# Qf-PV show V1
+# 作者与文件来源
 
-**QFziyu 的文字 PV 创作工作台。**
+## 本版作者
 
-整合与新版设计：**QFziyu**（QF 为简称）。基于 PV Fusion 的编辑能力，结合 JIZURA 歌曲风格与动态留白，把素材、字幕、运动和导出放进同一个离线工作台。
+- **项目名称：Qf-PV show V1**
+- **作者署名：QFziyu**
+## 一句话项目说明：在项目JIZUERA基础上，使得画面中的每一个元素得以独立拆分，独立自由调整运动曲线，框选关键帧，利用手动追踪功能自由绘制曲线
 
-## 直接开始
+。导出画面不会附加作者水印。本版署名不表示以下所有底层代码均从零原创。
 
-下载或克隆本仓库，用 **Chrome / Edge 打开 `index.html`** 即可使用。无需安装 Node、Python 或剪辑软件。保留整个目录，可以同时访问使用指南、来源说明和原版高级编辑器。
+## 直接使用的文件来源
 
-1. **素材**：导入音乐、背景或人物图片 / 视频，填写歌词，或导入 LRC / SRT。
-2. **风格**：选择歌曲分类、视觉配色与生成方案，点击“生成当前风格”。
-3. **构图**：设置画幅，启用动态留白；在画布拖动区域或角点，调整位置与大小。
-4. **元素 / 运动**：选择字幕句、背景形状或素材，修改属性、关键帧、跟随和追踪路径。
-5. **导出**：输出 MP4、PNG 序列、WAV 或 AE 工程包。保存 `.pvf` 项目可以保留素材和编辑记录。
+| 来源文件 | 用途 | 本版保留与修改 |
+| --- | --- | --- |
+| `PV-Fusion-v0.3.zip` | 编辑器主体 | 保留独立图层、逐句字幕、关键帧、跟随、追踪、速度曲线、素材管理、保存与导出。 |
+| `JIZURA-歌曲风格分类版.zip` | 歌曲分类、动效模板与简体编辑器 | 沿用六类歌曲规则、27 套配色与 860 项注册效果，导入简体模板名称和原版高级编辑器；保留 JIZURA 作者与许可。 |
+| PV Fusion 0.4 本地整合版 | V1 的直接开发基线 | 保留上一轮完成的完整模板入口、可变宽高关键帧、动态留白合成及 AE 蒙版导出。 |
 
-[完整使用指南](docs/USER-GUIDE.md) · [作者与文件来源](README-SOURCES.md) · [版权与许可](LICENSE.md)
+两个原始 ZIP 的文件大小与 SHA-256 见 [来源校验记录](docs/integration-sources.json)。记录只保存来源文件名，不保存原用户的绝对本机路径。原始 ZIP 本身没有重复放入仓库。
 
-## 能做什么
+源码比较确认：PV Fusion 原主体已经包含上述 JIZURA 歌曲分类和注册效果。本次“整合”包括开放完整模板入口、补足开关与简体名称、避免生成时覆盖所选歌曲分类；不是宣称新增了 860 项原创效果。
 
-- 六种歌曲分类及自由搭配；27 套视觉配色、860 项注册排版 / 动效（不是 860 套完整成片模板）。
-- 保留逐句字幕、独立背景元素、自由文字、图片和视频；每个可编辑元素使用自己的位置、缩放、旋转与关键帧。
-- 一个可移动、变宽高和旋转的动态留白区域，支持直接拖动和关键帧动画；人物图片与视频在区域内保留。
-- 手动单点 / 两点追踪、手绘路径、跟随图层、速度曲线、原始与处理后两份轨迹。
-- 完整 `.pvf` 项目保存，兼容既有 PV Fusion 项目和 JIZURA 项目 JSON。
+## 引擎、算法与依赖
 
-## 示例
+### JIZURA
 
-在“打开项目”里选择：
+原作者：**hakoniwa**。原始版权：`Copyright (c) 2026 hakoniwa`。许可：MIT，完整原文保存在 [licenses/JIZURA-LICENSE](licenses/JIZURA-LICENSE)。
 
-- `examples/Dynamic-space.pvf`：动态留白位置、宽高、旋转与逐句字幕。
-- `examples/Sentence-controls.pvf`：独立字幕句控制。
-- `examples/collage.pvf`、`construct.pvf`、`orbit.pvf`、`blueprint.pvf`、`pop.pvf`：五套可独立精修的背景。
+复用内容包括歌词解析、音乐分析、歌曲风格规划、模板库、Canvas 字效、导出流程和 AE 原生构建器。代码位于 `vendor/jizura/`，原版完整编辑器保存在 `JIZURA-complete.html`。
 
-## 本地开发
+保留 Fusion 已有的固定随机纹理、统一配色和导出前视频帧准备补丁；动态留白增加了分带空间适配。没有将所有模板内部字形或装饰改造成通用独立图层。
 
-仅开发和测试时需要 **Node.js 20+、Python 3.10+**。
+### ManualTracker / PV Fusion 运动系统
 
-```sh
-npm install
-npm run build
-npm test
-npm run release
-```
+来源是 PV Fusion 项目中作者QFziyu自研的 ManualTracker 2.3 相关实现。`src/curves.js` 保留其距离、弧长采样、Catmull–Rom、PCHIP、速度积分、Bezier 与 RDP 等曲线函数；模型、锁定和跟随控制继续通过 Fusion 模块使用。
 
-构建无需打包器或生产 npm 依赖；`@napi-rs/canvas` 只用于测试。发行 HTML 已随仓库提供。`npm run release` 生成 `dist/Qf-PV-show-V1-GitHub.zip`，打包前会重新构建并运行检查。测试也可通过 `CODEX_PRIMARY_RUNTIME_NODE_MODULES` 复用已有 Canvas 依赖。
 
-## 提交到 GitHub
+### mp4-muxer
 
-将**本目录中的文件和子目录**提交到新仓库的根目录，包含 `index.html`、`src/`、`vendor/`、`assets/`、`docs/`、`licenses/` 等。`.gitignore` 已排除安装依赖、缓存和本地测试输出；没有附带 `.git` 历史、凭据或个人媒体。
+版本：5.2.2。作者 / 来源：Vanilagy，<https://github.com/Vanilagy/mp4-muxer>。MIT 许可原文在 [第三方通知](licenses/JIZURA-THIRD_PARTY_NOTICES.md)。`vendor/mp4-muxer.min.js` 随发行 HTML 使用。
 
-可以在 GitHub Desktop 中从此文件夹创建本地仓库再 Publish，或使用 Git 将文件推送至你自己创建的仓库。GitHub Actions 已配置构建与自动检查；本次交付没有代为建立或发布远程仓库。
+### 字体与测试依赖
 
-## 项目结构
+JIZURA 可按原有逻辑请求 Google Fonts，字体未打包进仓库；网络不可用时使用系统字体，画面可能不同。字体信息见原第三方通知。
 
-```text
-index.html              可直接打开的离线工作台
-src/                    模块化源码、界面结构与样式
-assets/                 QF 标识
-vendor/                 JIZURA / AE 引擎、MP4 封装依赖
-examples/               可编辑示例及实际 Canvas 预览
-JIZURA-complete.html     保留原署名的原版高级编辑器
-README-SOURCES.md       来源文件、原作者及本版修改范围
-docs/                   使用、设计与验证说明
-licenses/               原始许可和第三方通知
-tests/                  模型、界面逻辑、渲染与导出检查
-tools/                  测试汇总与发行打包
-```
+`@napi-rs/canvas` 0.1.100 是开发测试依赖，MIT 许可；源码：<https://github.com/Brooooooklyn/canvas>。它不被嵌入离线工作台。
 
-## 验证与边界
+### 原项目记载的设计参考
 
-本版通过 **96 项自动检查**，包含 40 项界面事件模拟；歌曲分类检查覆盖 240 个种子组合。Canvas 渲染、透明 PNG 和可编辑项目读写采用实际像素 / 文件测试。完整说明见 [验证记录](docs/VALIDATION.md)。
+PV Fusion 的旧来源说明将 PV Tool 记为功能方向参考，指出未包含其网站代码、模板、图片或品牌资产。本版未新增使用该网站资源，不将它列为本仓库代码来源。
 
-真实浏览器布局、视频解码、硬件 MP4 编码和真实 AE 宿主尚未实测。AE 输出动态减去蒙版，但原生字幕仍保留原始分带位置，与浏览器动态重新布局有差异；需要保留浏览器画面时使用 PNG 序列与 WAV。
+## Qf-PV show V1 的主要修改
 
-作者署名指本版整合、界面与个人品牌，不替代原引擎和第三方代码作者。源码许可按各来源分别保留，见 [来源说明](README-SOURCES.md)。
+添加了更多独立自由度的编辑按钮
+优化了原有UI的显示逻辑
+整合了作者本人的PR插件 实现了变速曲线独立调整。对于单一元素的独立调整
+增加了一定程度的自动追踪，以及，完成度较高的手动逐帧追踪按钮，这就意味着你可以手绘运动轨迹
